@@ -75,6 +75,7 @@ const RegisterForm = () => {
                       placeholder="Enter your name"
                       type="text"
                       disabled={isPending}
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
