@@ -27,6 +27,8 @@ import FormSuccess from "../FormSuccess";
 
 import { register } from "@/actions/register";
 
+import { Loader2 } from "lucide-react";
+
 const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -123,7 +125,11 @@ const RegisterForm = () => {
           <FormError message={error || ""} />
           <FormSuccess message={success || ""} />
           <Button type="submit" className="w-full" disabled={isPending}>
-            Create an account
+            {isPending ? (
+              <Loader2 className="h-4 w-4 text-white animate-spin" />
+            ) : (
+              "Create an account"
+            )}
           </Button>
         </form>
       </Form>

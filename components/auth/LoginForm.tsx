@@ -27,6 +27,8 @@ import FormSuccess from "../FormSuccess";
 
 import { login } from "@/actions/login";
 
+import { Loader2 } from "lucide-react";
+
 const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -103,7 +105,11 @@ const LoginForm = () => {
           <FormError message={error || ""} />
           <FormSuccess message={success || ""} />
           <Button type="submit" className="w-full" disabled={isPending}>
-            Login
+            {isPending ? (
+              <Loader2 className="h-4 w-4 text-white animate-spin" />
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
       </Form>
