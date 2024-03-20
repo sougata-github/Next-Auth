@@ -48,8 +48,8 @@ const LoginForm = () => {
 
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        // setSuccess(data?.success);
       });
     });
   };
@@ -103,7 +103,7 @@ const LoginForm = () => {
             />
           </div>
           <FormError message={error || ""} />
-          <FormSuccess message={success || ""} />
+          {/* <FormSuccess message={success || ""} /> */}
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? (
               <Loader2 className="h-4 w-4 text-white animate-spin" />
