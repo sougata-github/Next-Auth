@@ -3,6 +3,8 @@ import authConfig from "./auth.config";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "./lib/db";
+import { getUserById } from "./data/user";
+import { UserRole } from "@prisma/client";
 
 export const {
   handlers: { GET, POST },
@@ -10,13 +12,43 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  callbacks: {
+    // async signIn({ user }) {
+    //   const existingUser = await getUserById(user.id!);
+
+    //   if (!existingUser || !existingUser.emailVerified) {
+    //     return false;
+    //   }
+
+    //   return true;
+    // },
+    async session({ token, session }) {
+      //now everywhere when we use the session we get access to the id and "role" of the user from the database.
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+
+      if (token.role && session.user) {
+        session.user.role = token.role as UserRole;
+      }
+
+      return session;
+    },
+    async jwt({ token }) {
+      /**
+       * id of the user generated in the database already present as "sub" field.
+       */
+      if (!token.sub) return token;
+
+      //add "role" field to token
+      const existingUser = await getUserById(token.sub);
+      if (!existingUser) return token;
+      token.role = existingUser.role;
+
+      return token;
+    },
+  },
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,
 });
-
-/**
- * While NextAuth.js strictly uses standard Web APIs (and thus can run in any environments that support that), some libraries or ORMs (Object-Relational Mapping) packages that you rely on might not be ready yet. In this case, you can split the auth configuration into multiple files. The following is an example of how to do this with a database adapter.
-
-NextAuth.js supports two session strategies. When you are using an adapter, you can choose to save the session data into a database. Unless your database and its adapter is compatible with the Edge runtime/infrastructure, you will not be able to use a "database" session strategy.
- */
