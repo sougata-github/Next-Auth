@@ -1,18 +1,28 @@
 import type { NextAuthConfig } from "next-auth";
 
-import credentials from "next-auth/providers/credentials";
-
 import { LoginSchema } from "./schemas";
 
 import { getUserByEmail } from "./data/user";
 
 import bcryptjs from "bcryptjs";
 
+import Github from "next-auth/providers/github";
+// import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+
 export default {
   providers: [
-    credentials({
-      async authorize(credentials) {
-        const validatedFields = LoginSchema.safeParse(credentials);
+    // Google({
+    //   clientId: process.env.GOOGLE_CLIENT_ID,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    // }),
+    Github({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+    Credentials({
+      async authorize(Credentials) {
+        const validatedFields = LoginSchema.safeParse(Credentials);
 
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
@@ -35,3 +45,8 @@ export default {
     }),
   ],
 } satisfies NextAuthConfig;
+
+/**
+ * email verification is needed only for credential users because google and github already do email verification,
+ * so populate the emailVefired field in the database whenever a user signs up for the first time using google/github.
+ */
