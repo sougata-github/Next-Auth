@@ -24,7 +24,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import FormError from "../FormError";
-// import FormSuccess from "../FormSuccess";
+import FormSuccess from "../FormSuccess";
 
 import { login } from "@/actions/login";
 
@@ -38,7 +38,7 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use with different provider"
+      ? "Email already in use with different provider."
       : "";
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -110,7 +110,7 @@ const LoginForm = () => {
             />
           </div>
           <FormError message={error || urlError} />
-          {/* <FormSuccess message={success || ""} /> */}
+          {/* <FormSuccess message={success || urlError} /> */}
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? (
               <Loader2 className="h-4 w-4 text-white animate-spin" />

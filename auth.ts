@@ -30,15 +30,21 @@ export const {
     },
   },
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user.id!);
+    async signIn({ user, account }) {
+      //allow OAuth without verification
+      if (account?.provider !== "credentials") {
+        return true;
+      }
 
-    //   if (!existingUser || !existingUser.emailVerified) {
-    //     return false;
-    //   }
+      const existingUser = await getUserById(user.id!);
 
-    //   return true;
-    // },
+      //prevent credentials sign-in without email verification
+      if (!existingUser || !existingUser.emailVerified) {
+        return false;
+      }
+
+      return true;
+    },
     async session({ token, session }) {
       //now everywhere when we use the session we get access to the id and "role" of the user from the database.
       if (token.sub && session.user) {

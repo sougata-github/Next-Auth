@@ -22,7 +22,9 @@ const Page = () => {
         >
           🔒Auth
         </h1>
-        <p className="text-lg text-white">A simple authentication service.</p>
+        <p className="text-lg text-white">
+          NextJS based Authentication service
+        </p>
         <div>
           <LoginButton>
             <Button variant="secondary" size="lg">
