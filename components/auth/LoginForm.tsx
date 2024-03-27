@@ -56,7 +56,7 @@ const LoginForm = () => {
     startTransition(() => {
       login(values).then((data) => {
         setError(data?.error);
-        // setSuccess(data?.success);
+        setSuccess(data?.success);
       });
     });
   };
@@ -110,7 +110,7 @@ const LoginForm = () => {
             />
           </div>
           <FormError message={error || urlError} />
-          {/* <FormSuccess message={success || urlError} /> */}
+          <FormSuccess message={success || urlError} />
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? (
               <Loader2 className="h-4 w-4 text-white animate-spin" />
